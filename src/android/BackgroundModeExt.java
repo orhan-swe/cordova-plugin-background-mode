@@ -27,6 +27,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.AppTask;
 import android.app.AlertDialog;
+import android.app.KeyguardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -368,7 +369,18 @@ public class BackgroundModeExt extends CordovaPlugin {
      */
     private void addSreenAndKeyguardFlags()
     {
-        getApp().runOnUiThread(() -> getApp().getWindow().addFlags(FLAG_ALLOW_LOCK_WHILE_SCREEN_ON | FLAG_SHOW_WHEN_LOCKED | FLAG_TURN_SCREEN_ON | FLAG_DISMISS_KEYGUARD));
+        getApp().runOnUiThread(() -> {
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                getApp().setShowWhenLocked(true);
+                getApp().setTurnScreenOn(true);
+                KeyguardManager keyguardManager = (KeyguardManager) getApp().getSystemService(Context.KEYGUARD_SERVICE);
+                keyguardManager.requestDismissKeyguard(getApp(), null);
+            //} else {
+            //   getApp().getWindow().addFlags(
+            //            FLAG_ALLOW_LOCK_WHILE_SCREEN_ON  | FLAG_DISMISS_KEYGUARD);
+            //}
+        });
+
     }
 
     /**
