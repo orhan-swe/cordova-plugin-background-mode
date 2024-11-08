@@ -91,6 +91,9 @@ public class BackgroundModeExt extends CordovaPlugin {
             case "battery":
                 disableBatteryOptimizations();
                 break;
+            case "isBatteryEnabled":
+                isDisableBatteryOptimizationsEnabled(callback);
+                break;
             case "webview":
                 disableWebViewOptimizations();
                 break;
@@ -208,6 +211,40 @@ public class BackgroundModeExt extends CordovaPlugin {
         intent.setData(Uri.parse("package:" + pkgName));
 
         cordova.getActivity().startActivity(intent);
+    }
+
+    /**
+     * Check if disabled battery optimizations for the app.
+     * Requires permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS to function.
+     */
+    @SuppressLint("BatteryLife")
+    private void isDisableBatteryOptimizationsEnabled(CallbackContext callback)
+    {
+        Activity activity = cordova.getActivity();
+        String pkgName    = activity.getPackageName();
+        PowerManager pm   = (PowerManager)getService(POWER_SERVICE);
+
+        boolean status   = false;
+        PluginResult res = new PluginResult(Status.OK, status);
+
+
+        if (SDK_INT < M) {
+            // not needed so we will say true
+            res = new PluginResult(Status.OK, true);
+            callback.sendPluginResult(res);
+            return;
+        }
+
+        if (pm.isIgnoringBatteryOptimizations(pkgName)) {
+            // enabled
+            res = new PluginResult(Status.OK, true);
+            callback.sendPluginResult(res);
+            return;
+        }
+
+        // not enabled
+        res = new PluginResult(Status.OK, false);
+        callback.sendPluginResult(res);
     }
 
     /**

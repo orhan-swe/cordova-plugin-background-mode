@@ -175,7 +175,20 @@ exports.disableBatteryOptimizations = function()
     {
         cordova.exec(null, null, 'BackgroundModeExt', 'battery', []);
     }
-};
+}
+
+/**
+ * Check if battery optimazation mode for the app is enabled.
+ *
+ * @return [ Void ]
+ */
+exports.isDisableBatteryOptimizationsEnabled = function(fn)
+{
+    if (this._isAndroid)
+    {
+        cordova.exec(fn, null, 'BackgroundModeExt', 'isBatteryEnabled', []);
+    }
+};;
 
 /**
  * Opens the system settings dialog where the user can tweak or turn off any
