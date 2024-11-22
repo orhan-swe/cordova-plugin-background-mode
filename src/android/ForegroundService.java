@@ -50,7 +50,7 @@ public class ForegroundService extends Service {
     // Fixed ID for the 'foreground' notification
     public static final int NOTIFICATION_ID = -574543954;
 
-    public static final int FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE = 16
+    public static final int FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE = 16;
 
     // Default title of the background notification
     private static final String NOTIFICATION_TITLE =
@@ -131,7 +131,7 @@ public class ForegroundService extends Service {
         boolean isSilent    = settings.optBoolean("silent", false);
 
         if (!isSilent) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) 
                 startForeground(NOTIFICATION_ID, makeNotification());
         } else {
                 startForeground(NOTIFICATION_ID, makeNotification(),
